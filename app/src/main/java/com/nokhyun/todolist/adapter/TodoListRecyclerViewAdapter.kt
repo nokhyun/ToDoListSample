@@ -4,13 +4,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.nokhyun.todolist.R
-import com.nokhyun.todolist.model.TodoListModel
+import com.nokhyun.todolist.database.entity.MyTodo
+import com.nokhyun.todolist.viewmodel.TodoViewModel
 
-class TodoListRecyclerViewAdapter :
+class TodoListRecyclerViewAdapter(private val todoViewModel: TodoViewModel) :
     RecyclerView.Adapter<TodoListRecyclerViewAdapter.TodoListRecyclerViewHolder>() {
-    private lateinit var todoListModelItems: ArrayList<TodoListModel>
+    private var todoListModelItems: List<MyTodo> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoListRecyclerViewHolder {
         val view =
@@ -21,28 +23,26 @@ class TodoListRecyclerViewAdapter :
     override fun getItemCount(): Int = todoListModelItems.size
     override fun onBindViewHolder(holder: TodoListRecyclerViewHolder, position: Int) {
 
-        holder.init(todoListModelItems[position])
+        holder.onBind(todoListModelItems[position])
     }
 
     inner class TodoListRecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private lateinit var title: TextView
+        private var title: TextView = itemView.findViewById(R.id.tv_title)
 
-        fun init(todoListModel: TodoListModel) {
-            title = itemView.findViewById(R.id.tv_title)
+        fun onBind(todoListModel: MyTodo) {
+            title.text = todoListModel.todo
 
-            onBind(todoListModel)
+            setListener(todoListModel)
         }
 
-        private fun onBind(todoListModel: TodoListModel) {
-            title.text = todoListModel.title
-        }
-
-        private fun setListener(){
-
+        private fun setListener(todoListModel: MyTodo) {
+            itemView.setOnClickListener {
+                todoViewModel.delete(todoListModel.num!!)
+            }
         }
     }
 
-    fun updateData(todoListModelItems: ArrayList<TodoListModel>) {
+    fun updateData(todoListModelItems: List<MyTodo>) {
         this.todoListModelItems = todoListModelItems
         notifyDataSetChanged()
     }

@@ -1,19 +1,18 @@
 package com.nokhyun.todolist.database.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.lifecycle.LiveData
+import androidx.room.*
 import com.nokhyun.todolist.database.entity.MyTodo
 
 @Dao
 interface MyTodoDao {
-    @Query("SELECT * From todoList")
-    fun getAll(): List<MyTodo>
+    @Query("SELECT * FROM todoList")
+    fun getAll(): LiveData<List<MyTodo>>
 
-    @Insert
-    fun insertAll(vararg myTodos: MyTodo)
+    // OnConflictStrategy.REPLACE 중복된 값이 들어왔을 떄 그 값으로 변
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(myTodos: MyTodo)
 
-    @Delete
-    fun delete(myTodo: MyTodo)
+    @Query("DELETE FROM todoList WHERE num = :num")
+    fun deleteById(num: Int)
 }
