@@ -10,7 +10,7 @@ import com.nokhyun.todolist.R
 import com.nokhyun.todolist.database.entity.MyTodo
 import com.nokhyun.todolist.viewmodel.TodoViewModel
 
-class TodoListRecyclerViewAdapter(private val todoViewModel: TodoViewModel) :
+class TodoListRecyclerViewAdapter(private val todoViewModel: TodoViewModel?) :
     RecyclerView.Adapter<TodoListRecyclerViewAdapter.TodoListRecyclerViewHolder>() {
     private var todoListModelItems: List<MyTodo> = ArrayList()
 
@@ -37,14 +37,18 @@ class TodoListRecyclerViewAdapter(private val todoViewModel: TodoViewModel) :
 
         private fun setListener(todoListModel: MyTodo) {
             itemView.setOnClickListener {
-                todoViewModel.delete(todoListModel.num!!)
+                todoViewModel?.delete(todoListModel.num!!)
             }
         }
     }
 
-    fun updateData(todoListModelItems: List<MyTodo>) {
-        this.todoListModelItems = todoListModelItems
-        notifyDataSetChanged()
+    fun updateData(todoListModelItems: List<MyTodo>?) {
+        todoViewModel.let {
+            this.todoListModelItems = todoListModelItems!!
+            notifyDataSetChanged()
+        }
+
     }
+
 
 }
