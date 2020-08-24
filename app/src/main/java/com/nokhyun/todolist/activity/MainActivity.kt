@@ -20,7 +20,7 @@ class MainActivity : BaseActivity() {
     }
     private val imm: InputMethodManager by lazy { getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager }
     private var myTodoDatas: LiveData<List<MyTodo>>? = null
-    // default
+    // 기존방식
 //    private lateinit var todoListRecyclerViewAdapter: TodoListRecyclerViewAdapter
 
     // databinding
@@ -42,8 +42,8 @@ class MainActivity : BaseActivity() {
 
         myTodoDatas = todoViewModel.getAllDatas()
         myTodoDatas?.observe(this, Observer {
-            todoListRecyclerViewAdapter.updateData(it)
-//            todoListRecyclerViewAdapter.update(it)
+//            todoListRecyclerViewAdapter.updateData(it)
+            todoListRecyclerViewAdapter.update(it)
         })
 
     }
@@ -61,7 +61,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun setRecyclerView() {
-        // default
+        // 기존방식
 //        todoListRecyclerViewAdapter = TodoListRecyclerViewAdapter(todoViewModel)
 //
 //        rv_main.apply {
